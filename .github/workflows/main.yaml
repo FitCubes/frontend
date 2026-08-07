@@ -33,6 +33,8 @@ jobs:
 
     - name: Build code
       run: npm run build
+      env:
+        VITE_API_URL: "http://${{ secrets.BACKEND_DOMAIN }}:${{ secrets.BACKEND_PORT }}"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v7

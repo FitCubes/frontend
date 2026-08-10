@@ -11,6 +11,8 @@ import RecipeBuilder from "@/sections/RecipeBuilder.tsx";
 import Onboarding from "@/sections/Onboarding.tsx";
 import { useDataLoader } from "@/hooks/useDataLoader.ts";
 import { PageTransition } from "@/components/layout/PageTransition.tsx";
+import { PageLoader } from "@/components/ui/PageLoader.tsx";
+import { apiClient } from "@/services/apiClient.ts";
 
 const TABS = [
   { path: "/", label: "Home", icon: LayoutDashboard },
@@ -85,10 +87,11 @@ function App() {
   };
 
   useEffect(() => {
-    // Defer state update to next tick to avoid synchronous setState during render
+    apiClient.checkBackendHealth();
+
     const timer = setTimeout(() => {
       setMounted(true);
-    }, 0);
+    }, 5000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -107,7 +110,9 @@ function App() {
     }
   }, [theme]);
 
-  if (!mounted) return null;
+  if (!mounted) {
+    return <PageLoader text="Loading FitCubes..." />;
+  }
 
   if (showOnboarding) {
     return <Onboarding onComplete={() => {

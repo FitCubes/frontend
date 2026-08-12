@@ -81,18 +81,6 @@ class ApiClient {
   public delete<T>(endpoint: string, options?: RequestInit): Promise<ApiResponse<T>> {
     return this.request<T>(endpoint, { ...options, method: 'DELETE' });
   }
-
-  public async checkBackendHealth(): Promise<{ online: boolean; message: string }> {
-    try {
-      const res = await this.get<{ status?: string }>('/health');
-      if (res.ok) {
-        return { online: true, message: 'Backend connected successfully' };
-      }
-      return { online: false, message: `Backend responded with status ${res.status}` };
-    } catch {
-      return { online: false, message: 'Backend connection unreachable' };
-    }
-  }
 }
 
 export const apiClient = new ApiClient();

@@ -34,7 +34,7 @@ jobs:
     - name: Build code
       run: npm run build
       env:
-        VITE_API_BASE_URL: "http://${{ secrets.BACKEND_DOMAIN }}:${{ secrets.BACKEND_PORT }}/api/v1"
+        VITE_API_BASE_URL: "http://${{ secrets.BACKEND_DOMAIN }}/api"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v7

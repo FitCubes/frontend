@@ -12,14 +12,14 @@ import {
   FolderOpen,
   Check,
 } from "lucide-react";
-import { useStore } from "@/store/useStore.ts";
-import { useModalOpen } from "@/hooks/useModalOpen.ts";
+import { useStore } from "@/store/useStore";
+import { useModalOpen } from "@/hooks/useModalOpen";
 import type { FoodItem } from "@/types";
-import InfoTooltip from "@/components/InfoTooltip.tsx";
-import FoodSearch from "./FoodSearch.tsx";
-import FoodAnalysis from "@/components/FoodAnalysis.tsx";
-import { blockInvalidIntegerInput, sanitizePositiveInt, sanitizeNameInput } from "@/utils/inputHandlers.ts";
-import { generateSafeId } from "@/utils/calculations.ts";
+import InfoTooltip from "@/components/InfoTooltip";
+import FoodSearch from "./FoodSearch";
+import FoodAnalysis from "@/components/FoodAnalysis";
+import { blockInvalidIntegerInput, sanitizePositiveInt, sanitizeNameInput } from "@/utils/inputHandlers";
+import { generateSafeId } from "@/utils/calculations";
 
 interface Ingredient {
   id: string;
@@ -67,12 +67,12 @@ export default function RecipeBuilder() {
   }, [success]);
 
   const loadExistingRecipe = useCallback((recipeFood: FoodItem) => {
-    if (!recipeFood.recipeIngredients) {
+    if (!recipeFood.ingredients) {
       setError("This is not a custom recipe, it cannot be edited.");
       return;
     }
 
-    const loadIngredients: Ingredient[] = recipeFood.recipeIngredients.map(
+    const loadIngredients: Ingredient[] = recipeFood.ingredients.map(
       (ing) => {
         const originalProduct = products.find((p) => p.id === ing.foodItemId);
 
@@ -310,7 +310,7 @@ export default function RecipeBuilder() {
         typeof finalWeight === "number" && finalWeight > 0
           ? finalWeight
           : rawWeight,
-      recipeIngredients: ingredients.map((ing) => ({
+      ingredients: ingredients.map((ing) => ({
         foodItemId: ing.product.id,
         name: ing.product.name,
         weight: ing.weight as number,
@@ -714,7 +714,7 @@ export default function RecipeBuilder() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="w-full max-w-[500px] h-[90vh] md:h-[800px] glass rounded-t-[2.5rem] md:rounded-[2.5rem] overflow-hidden"
+              className="w-full max-w-[500px] h-[90dvh] max-h-[90dvh] md:h-[800px] glass rounded-t-[2.5rem] md:rounded-[2.5rem] overflow-hidden"
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
@@ -739,7 +739,7 @@ export default function RecipeBuilder() {
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="w-full max-w-[500px] h-[90vh] md:h-[800px] glass rounded-t-[2.5rem] md:rounded-[2.5rem] overflow-hidden"
+              className="w-full max-w-[500px] h-[90dvh] max-h-[90dvh] md:h-[800px] glass rounded-t-[2.5rem] md:rounded-[2.5rem] overflow-hidden"
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}

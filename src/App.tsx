@@ -13,7 +13,7 @@ import { useDataLoader } from "@/hooks/useDataLoader.ts";
 import { PageTransition } from "@/components/layout/PageTransition.tsx";
 import { PageLoader } from "@/components/ui/PageLoader.tsx";
 import { MobileMenu } from "./sections/MobileMenu";
-import { MenuSelection } from "./sections/MenuSelection";
+import { MobileMenuSelection } from "./sections/MenuSelection";
 import { Menu } from "./sections/Menu";
 
 const TABS = [
@@ -39,6 +39,7 @@ function App() {
   const openModalCount = useStore(state => state.openModalCount);
   const [showOnboarding, setShowOnboarding] = useState(!isOnboarded);
   const [mounted, setMounted] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth < 768 : false
@@ -147,8 +148,8 @@ function App() {
     <>
       {isMobileView ? (
         <MobileMenu
-          menuOpen={menuOpen}
-          setMenuOpen={setMenuOpen}
+          mobileMenuOpen={mobileMenuOpen}
+          setMobileMenuOpen={setMobileMenuOpen}
         />
       ) : (
         <Menu
@@ -236,7 +237,7 @@ function App() {
           </main>
         </div>
       </div>
-      {menuOpen && <MenuSelection setMenuOpen={setMenuOpen} />}
+      {mobileMenuOpen && <MobileMenuSelection setMobileMenuOpen={setMobileMenuOpen} />}
     </>
   );
 }

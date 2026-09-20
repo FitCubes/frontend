@@ -18,9 +18,9 @@ import InfoTooltip from '@/components/InfoTooltip.tsx';
 import { ProgressSkeleton } from '@/components/progress/ProgressSkeleton';
 
 const TIMEFRAMES = [
-  { key: '1W', label: '7 Days', days: 7 },
-  { key: '2W', label: '14 Days', days: 14 },
-  { key: '1M', label: '30 Days', days: 30 },
+  { key: '1 Week', label: '7 Days', days: 7 },
+  { key: '2 Weeks', label: '14 Days', days: 14 },
+  { key: '1 Month', label: '30 Days', days: 30 },
 ];
 
 export default function ProgressScreen() {
@@ -144,7 +144,7 @@ export default function ProgressScreen() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="shrink-0 px-5 pt-6 pb-2">
+      <div className="shrink-0 px-5 pt-12 pb-2">
         <h1 className="text-2xl font-bold">Progress</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
           Track your deficit and weight trajectory
@@ -444,7 +444,7 @@ export default function ProgressScreen() {
 
         {/* Stats Grid */}
         <motion.div
-          className="grid grid-cols-2 gap-3 mt-4"
+          className="grid grid-cols-1 gap-3 mt-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}

@@ -123,7 +123,7 @@ export default function ProfileScreen() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="shrink-0 px-5 pt-6 pb-2 flex items-start justify-between">
+      <div className="shrink-0 px-5 pt-12 pb-2 flex items-start justify-between">
         <div className="flex-1 mr-4">
           <input
             type="text"

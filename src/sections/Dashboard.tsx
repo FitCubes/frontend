@@ -1,9 +1,10 @@
 import { useMemo, useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Flame, Footprints, TrendingDown, Beef, Wheat as WheatIcon, Droplets } from 'lucide-react';
+import { Flame, Footprints, TrendingDown, Beef, Wheat as WheatIcon, Droplets, Home } from 'lucide-react';
 import { useStore } from '@/store/useStore.ts';
 import { calculateTDEE, calculateNetDeficit, getRelativeDateLabel, formatLargeNumber } from '@/utils/calculations.ts';
 import { DashboardSkeleton } from '@/components/dashboard/DashboardSkeleton';
+import { HomeDashboard } from '@/components/dashboard/HomeDashboard';
 
 export default function Dashboard() {
   const profile = useStore((state) => state.profile);
@@ -63,19 +64,21 @@ export default function Dashboard() {
   }
 
   return (
+
     <div className="flex flex-col h-full">
+      <HomeDashboard />
       {/* Header */}
-      <div className="shrink-0 px-5 pt-6 pb-2">
+      {/* <div className="shrink-0 px-5 pt-6 pb-2">
         <p className="text-sm text-muted-foreground">{getRelativeDateLabel(selectedDate)}</p>
         <h1 className="text-2xl font-bold mt-0.5">
           {getTimeOfDay()}, {profile.name}
         </h1>
-      </div>
+      </div> */}
 
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto no-scrollbar px-5 pb-6">
         {/* Calorie Ring */}
-        <motion.div
+        {/* <motion.div
           className="flex flex-col items-center mt-4"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -117,10 +120,10 @@ export default function Dashboard() {
               </span>
             </div>
           </div>
-        </motion.div>
+        </motion.div> */}
 
         {/* Macros */}
-        <motion.div
+        {/* <motion.div
           className="mt-6 space-y-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -178,16 +181,33 @@ export default function Dashboard() {
               animate={{ width: `${fatsPct}%` }}
               transition={{ duration: 0.6, delay: 0.5 }}
             />
-          </div>
-        </motion.div>
+          </div> 
+        </motion.div> */}
 
         {/* Stats Cards */}
-        <motion.div
-          className="grid grid-cols-2 gap-3 mt-6"
+        {/* <motion.div
+          className="grid grid-cols-1 gap-3 mt-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-        >
+        > <div className="glass-card rounded-2xl p-4">
+                    <div className="flex items-center gap-2">
+            <TrendingDown className="w-4 h-4 text-primary" />
+            <span className="text-xs text-muted-foreground font-medium">Energy Balance</span>
+          </div>
+          <p
+            className={`text-2xl font-bold mt-1 ${netDeficit > 0 ? 'text-primary' : netDeficit < 0 ? 'text-destructive' : 'text-muted-foreground'}`}
+          >
+            {netDeficit > 0 ? `-${formatLargeNumber(netDeficit)} kcal` : netDeficit < 0 ? `+${formatLargeNumber(Math.abs(netDeficit))} kcal` : '0 kcal'}
+          </p>
+          <span className="text-sm font-medium mt-2 block">
+            {netDeficit > 50
+              ? `Expected fat loss: ~${formatLargeNumber(netDeficit / 7.7)} g 📉`
+              : netDeficit < -50
+              ? `Expected fat gain: ~${formatLargeNumber(Math.abs(netDeficit / 7.7))} g 📈`
+              : 'Maintaining current weight ⚖️'}
+          </span>
+          </div>
           <div className="glass-card rounded-2xl p-4">
             <div className="flex items-center gap-2">
               <Flame className="w-4 h-4 text-orange-500" />
@@ -204,32 +224,7 @@ export default function Dashboard() {
             <p className="text-xl font-bold mt-1">{formatLargeNumber(totals.exercise)}</p>
             <span className="text-xs text-muted-foreground">kcal</span>
           </div>
-        </motion.div>
-
-        {/* Deficit Card */}
-        <motion.div
-          className="mt-4 glass-card rounded-2xl p-5"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.5 }}
-        >
-          <div className="flex items-center gap-2">
-            <TrendingDown className="w-4 h-4 text-primary" />
-            <span className="text-xs text-muted-foreground font-medium">Energy Balance</span>
-          </div>
-          <p
-            className={`text-2xl font-bold mt-1 ${netDeficit > 0 ? 'text-primary' : netDeficit < 0 ? 'text-destructive' : 'text-muted-foreground'}`}
-          >
-            {netDeficit > 0 ? `-${formatLargeNumber(netDeficit)} kcal` : netDeficit < 0 ? `+${formatLargeNumber(Math.abs(netDeficit))} kcal` : '0 kcal'}
-          </p>
-          <span className="text-sm font-medium mt-2 block">
-            {netDeficit > 50
-              ? `Expected fat loss: ~${formatLargeNumber(netDeficit / 7.7)} g 📉`
-              : netDeficit < -50
-              ? `Expected fat gain: ~${formatLargeNumber(Math.abs(netDeficit / 7.7))} g 📈`
-              : 'Maintaining current weight ⚖️'}
-          </span>
-        </motion.div>
+        </motion.div> */}
       </div>
     </div>
   );

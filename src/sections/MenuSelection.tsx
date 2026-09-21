@@ -44,8 +44,8 @@ export const MenuSelection: React.FC<MenuSelectionProps> = ({ setMenuOpen }) => 
           className="absolute flex flex-col gap-2 top-[80px] right-[20px] w-[288px] h-[209px] bg-[#16181D] outline-none"
         >
           <ul className="flex flex-col gap-1 h-[160px] border-b border-[#32363E]">
-    
-                       <Link to="/profile" onClick={() => setMenuOpen(false)}><li className={buttonClass + " mt-1"}>Body metrics</li></Link>
+
+            <Link to="/profile" onClick={() => setMenuOpen(false)}><li className={buttonClass + " mt-1"}>Body metrics</li></Link>
             <Link to="/profile" onClick={() => setMenuOpen(false)}><li className={buttonClass}>Exercise Metrics</li></Link>
             <Link to="/profile" onClick={() => setMenuOpen(false)}><li className={buttonClass}>Settings</li></Link>
           </ul>

@@ -44,8 +44,8 @@ export const MobileMenuSelection: React.FC<MobileMenuSelectionProps> = ({ setMob
           className="absolute flex flex-col gap-2 top-[80px] w-[288px] h-[382px] bg-[#16181D] outline-none"
         >
           <ul className="flex flex-col gap-1 h-[160px] border-b border-[#32363E]">
-    
-           <Link to="/" onClick={() => setMobileMenuOpen(false)}><li className={buttonClass + " mt-1"}>Home</li></Link>
+
+            <Link to="/" onClick={() => setMobileMenuOpen(false)}><li className={buttonClass + " mt-1"}>Home</li></Link>
             <Link to="/diary" onClick={() => setMobileMenuOpen(false)}><li className={buttonClass}>Diary</li></Link>
             <Link to="/kitchen" onClick={() => setMobileMenuOpen(false)}><li className={buttonClass}>Kitchen</li></Link>
           </ul>

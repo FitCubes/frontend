@@ -42,7 +42,7 @@ export const CalorieRing: React.FC = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="relative w-56 h-56">
+          <div className="relative w-[288px] h-[288px] md:w-[314px] md:h-[314px]">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 160 160">
               <circle
                 cx="80"
@@ -50,7 +50,7 @@ export const CalorieRing: React.FC = () => {
                 r="70"
                 fill="none"
                 stroke="currentColor"
-                className="text-border/20"
+                className="text-border/80"
                 strokeWidth="10"
               />
               <motion.circle

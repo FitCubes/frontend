@@ -13,8 +13,9 @@ import { useDataLoader } from "@/hooks/useDataLoader.ts";
 import { PageTransition } from "@/components/layout/PageTransition.tsx";
 import { PageLoader } from "@/components/ui/PageLoader.tsx";
 import { MobileMenu } from "./sections/MobileMenu";
-import { MobileMenuSelection } from "./sections/MenuSelection";
+import { MobileMenuSelection } from "./sections/MobileMenuSelection.tsx";
 import { Menu } from "./sections/Menu";
+import { MenuSelection } from "./sections/MenuSelection.tsx";
 
 const TABS = [
   { path: "/", label: "Home", icon: LayoutDashboard },
@@ -204,6 +205,7 @@ function App() {
             onTouchEnd={onTouchEnd}
             className="h-full overflow-y-auto no-scrollbar relative pt-safe"
           >
+            <div className="pointer-events-none absolute top-0 z-0 bg-[url('public/img/welcome-bg5-c.webp')] bg-cover bg-top bg-no-repeat opacity-20 w-full h-[120dvh]" />
             <AnimatePresence mode="wait">
               <Routes location={location} key={location.pathname}>
                 <Route
@@ -238,6 +240,7 @@ function App() {
         </div>
       </div>
       {mobileMenuOpen && <MobileMenuSelection setMobileMenuOpen={setMobileMenuOpen} />}
+      {menuOpen && <MenuSelection setMenuOpen={setMenuOpen} />}
     </>
   );
 }

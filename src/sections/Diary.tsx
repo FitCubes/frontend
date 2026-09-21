@@ -131,7 +131,7 @@ export default function Diary() {
         onNextDay={() => setSelectedDate(addDays(selectedDate, 1))}
       />
 
-      <div className="flex-1 px-5 py-4 space-y-4">
+      <div className="glass-card mx-10 flex-1 px-5 py-4 space-y-4">
         {isDiaryLoading ? (
           <>
             <MealSectionSkeleton itemCount={2} />
@@ -167,13 +167,13 @@ export default function Diary() {
       <AnimatePresence>
         {showFoodSearch && (
           <motion.div
-            className="fixed inset-0 z-[100] bg-black/60 dark:bg-black/80 backdrop-blur-sm flex justify-center items-end md:items-center p-0 md:p-4"
+            className="fixed inset-0 z-[100] bg-black/60 dark:bg-black/80 backdrop-blur-sm flex justify-center items-end md:items-center p-0 md:pt-16"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="w-full max-w-[500px] h-[90dvh] max-h-[90dvh] md:h-[800px] glass rounded-t-[2.5rem] md:rounded-[2.5rem] overflow-hidden bg-background"
+              className="w-full mx-10  h-[90dvh] max-h-[90dvh] md:h-[800px] glass rounded-t-[2.5rem] md:rounded-[2.5rem] overflow-hidden bg-background"
               initial={{ y: '100%' }}
               animate={{ y: 0 }}
               exit={{ y: '100%' }}

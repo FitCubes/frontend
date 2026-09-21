@@ -152,7 +152,7 @@ export default function ProgressScreen() {
       </div>
 
       {/* Timeframe Toggle */}
-      <div className="shrink-0 px-5 pb-3">
+      <div className="shrink-0 px-5 pb-3 w-[288px] md:w-[522px] mx-auto">
         <div className="flex bg-secondary/50 backdrop-blur-lg rounded-xl p-1">
           {TIMEFRAMES.map((tf) => (
             <button
@@ -444,7 +444,7 @@ export default function ProgressScreen() {
 
         {/* Stats Grid */}
         <motion.div
-          className="grid grid-cols-1 gap-3 mt-4"
+          className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.2 }}

@@ -33,11 +33,11 @@ export const EnergyBalanceCard: React.FC = () => {
     const netDeficit = calculateNetDeficit(tdee, totals.calories, totals.exercise);
     return (
 <motion.div
-          className="grid grid-cols-1 gap-3 mt-6 mx-4"
+          className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6 mx-4 z-100"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.4 }}
-        > <div className="glass-card rounded-2xl p-4">
+        > <div className="glass-card rounded-2xl p-4 col-span-1 md:col-span-2">
                     <div className="flex items-center gap-2">
             <TrendingDown className="w-4 h-4 text-primary" />
             <span className="text-xs text-muted-foreground font-medium">Energy Balance</span>

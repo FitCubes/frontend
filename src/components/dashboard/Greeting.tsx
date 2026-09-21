@@ -7,7 +7,7 @@ export const Greeting: React.FC = () => {
     return (
         <div className="shrink-0 px-5 pt-12 pb-2">
             <p className="text-sm text-muted-foreground">{getRelativeDateLabel(selectedDate)}</p>
-            <h1 className="font-medium text-[18px] leading-[115%] tracking-normal serif">
+            <h1 className="font-medium text-[18px] leading-[115%] tracking-normal">
                 {getTimeOfDay()}, {profile.name}
             </h1>
         </div>

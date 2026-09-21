@@ -43,7 +43,7 @@ export const MacroBars: React.FC = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Beef className="w-4 h-4 text-primary" />
-              <span className="text-sm text-muted-foreground font-medium">Protein</span>
+              <span className="text-sm font-medium">Protein</span>
             </div>
             <span className="text-sm font-medium">
               {formatLargeNumber(totals.protein)}g / {formatLargeNumber(macroTargets.protein)}g
@@ -61,7 +61,7 @@ export const MacroBars: React.FC = () => {
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-2">
               <WheatIcon className="w-4 h-4 text-blue-400" />
-              <span className="text-sm text-muted-foreground font-medium">Carbs</span>
+              <span className="text-sm font-medium">Carbs</span>
             </div>
             <span className="text-sm font-medium">
               {formatLargeNumber(totals.carbs)}g / {formatLargeNumber(macroTargets.carbs)}g
@@ -79,7 +79,7 @@ export const MacroBars: React.FC = () => {
           <div className="flex items-center justify-between pt-1">
             <div className="flex items-center gap-2">
               <Droplets className="w-4 h-4 text-orange-400" />
-              <span className="text-sm text-muted-foreground font-medium">Fats</span>
+              <span className="text-sm font-medium">Fats</span>
             </div>
             <span className="text-sm font-medium">
               {formatLargeNumber(totals.fats)}g / {formatLargeNumber(macroTargets.fats)}g

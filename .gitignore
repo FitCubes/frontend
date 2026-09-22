@@ -12,19 +12,10 @@ dist
 dist-ssr
 *.local
 
-# Environment & Secrets
-.env
-.env.*
-!.env.example
-
-# Java / Maven (Backend)
-target/
-*.class
-
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
-.idea/
+.idea
 .DS_Store
 *.suo
 *.ntvs*
@@ -32,6 +23,14 @@ target/
 *.sln
 *.sw?
 
-# Local Developer Notes
-1/
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+!.env.production
+!.env.development
 
+# FitCubes Documentation & Local Notes
+1/

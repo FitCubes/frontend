@@ -20,6 +20,9 @@ import FoodSearch from "./FoodSearch";
 import FoodAnalysis from "@/components/FoodAnalysis";
 import { blockInvalidIntegerInput, sanitizePositiveInt, sanitizeNameInput } from "@/utils/inputHandlers";
 import { generateSafeId } from "@/utils/calculations";
+import { recipeService } from "@/services/recipeService";
+import { authService } from "@/services/authService";
+import { mapFoodItemToCreateRecipeDto } from "@/utils/apiMappers";
 
 interface Ingredient {
   id: string;
@@ -325,6 +328,24 @@ export default function RecipeBuilder() {
       updateProduct(editingRecipeId, newProduct);
     } else {
       addProduct(newProduct);
+    }
+
+    if (authService.isAuthenticated()) {
+      const payload = mapFoodItemToCreateRecipeDto(newProduct);
+      if (editingRecipeId && !asNew && editingRecipeId.startsWith('recipe_')) {
+        const numericId = editingRecipeId.replace('recipe_', '');
+        recipeService.updateRecipe(numericId, payload).catch((err) => {
+          console.error('Failed to sync recipe update with backend:', err);
+        });
+      } else {
+        recipeService.createRecipe(payload).then((res) => {
+          if (res.ok && res.data) {
+            updateProduct(targetId, { id: `recipe_${res.data.id}` });
+          }
+        }).catch((err) => {
+          console.error('Failed to sync new recipe with backend:', err);
+        });
+      }
     }
 
     setIngredients([]);

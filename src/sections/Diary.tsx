@@ -12,6 +12,12 @@ import { ConfirmModal } from '@/components/ui/ConfirmModal';
 import FoodSearch from './FoodSearch';
 import FoodAdd from './FoodAdd';
 import ExerciseLogger from './ExerciseLogger';
+import { authService } from '@/services/authService';
+import { diaryService } from '@/services/diaryService';
+import {
+  mapDiaryFoodEntryDtoToFoodEntry,
+  mapDiaryExerciseEntryDtoToExerciseEntry,
+} from '@/utils/apiMappers';
 import type { FoodItem, FoodEntry, ExerciseEntry } from '@/types';
 
 export default function Diary() {
@@ -21,6 +27,7 @@ export default function Diary() {
   const products = useStore((state) => state.products);
   const removeFoodEntry = useStore((state) => state.removeFoodEntry);
   const removeExerciseEntry = useStore((state) => state.removeExerciseEntry);
+  const syncDayLog = useStore((state) => state.syncDayLog);
   const pendingFoodLog = useStore((state) => state.pendingFoodLog);
   const setPendingFoodLog = useStore((state) => state.setPendingFoodLog);
 
@@ -40,14 +47,42 @@ export default function Diary() {
   useModalOpen(showExercise);
   useModalOpen(!!directFoodAdd);
 
-  // Simulated Database API Fetch delay (1500ms) on date change
+  // Fetch diary entries from live Spring Boot backend on date change
   useEffect(() => {
-    setIsDiaryLoading(true);
-    const timer = setTimeout(() => {
+    let isCancelled = false;
+
+    if (!authService.isAuthenticated()) {
       setIsDiaryLoading(false);
-    }, 1500);
-    return () => clearTimeout(timer);
-  }, [selectedDate]);
+      return;
+    }
+
+    setIsDiaryLoading(true);
+
+    diaryService
+      .getDayLog(selectedDate)
+      .then((res) => {
+        if (isCancelled) return;
+        if (res.ok && res.data) {
+          const mappedFoods = (res.data.foodEntries || []).map(mapDiaryFoodEntryDtoToFoodEntry);
+          const mappedExercises = (res.data.exerciseEntries || []).map(
+            mapDiaryExerciseEntryDtoToExerciseEntry
+          );
+          syncDayLog(selectedDate, mappedFoods, mappedExercises);
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load day log from backend:', err);
+      })
+      .finally(() => {
+        if (!isCancelled) {
+          setIsDiaryLoading(false);
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [selectedDate, syncDayLog]);
 
   useEffect(() => {
     if (pendingFoodLog) {
@@ -119,6 +154,34 @@ export default function Diary() {
 
   const handleDeleteExercise = (id: string) => {
     removeExerciseEntry(selectedDate, id);
+    if (authService.isAuthenticated()) {
+      // Only sync with backend if entry has a numeric DB ID
+      if (!id.startsWith('ex_') && /^\d+$/.test(id)) {
+        diaryService.removeExerciseEntry(selectedDate, id).catch((err) => {
+          console.error('Failed to delete exercise entry from backend:', err);
+        });
+      }
+    }
+  };
+
+  const handleConfirmDeleteFood = () => {
+    if (!entryToDelete) return;
+    const entry = entryToDelete;
+    setEntryToDelete(null);
+    removeFoodEntry(selectedDate, entry.id);
+
+    if (authService.isAuthenticated()) {
+      // Only sync with backend if entry has a numeric DB ID
+      if (!entry.id.startsWith('fe_') && /^\d+$/.test(entry.id)) {
+        diaryService.removeFoodEntry(selectedDate, entry.id).catch((err) => {
+          console.error('Failed to delete food entry from backend:', err);
+        });
+      }
+    }
+  };
+
+  const handleCancelDeleteFood = () => {
+    setEntryToDelete(null);
   };
 
   return (
@@ -251,13 +314,8 @@ export default function Diary() {
         }
         confirmText="Remove"
         variant="destructive"
-        onConfirm={() => {
-          if (entryToDelete) {
-            removeFoodEntry(selectedDate, entryToDelete.id);
-            setEntryToDelete(null);
-          }
-        }}
-        onCancel={() => setEntryToDelete(null)}
+        onConfirm={handleConfirmDeleteFood}
+        onCancel={handleCancelDeleteFood}
       />
     </div>
   );

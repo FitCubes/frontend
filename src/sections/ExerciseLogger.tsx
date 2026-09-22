@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, Check, Dumbbell, Footprints, Timer, Flame } from 'lucide-react';
-import { useStore } from '@/store/useStore.ts';
-import { calculateExerciseCalories, generateSafeId } from '@/utils/calculations.ts';
+import { useStore } from '@/store/useStore';
+import { calculateExerciseCalories, generateSafeId } from '@/utils/calculations';
 import type { ExerciseEntry } from '@/types';
-import InfoTooltip from '@/components/InfoTooltip.tsx';
+import InfoTooltip from '@/components/InfoTooltip';
 import FoodItemCardSkeleton from '@/components/food/FoodItemCardSkeleton';
-import { blockInvalidIntegerInput, blockInvalidNumberInput } from '@/utils/inputHandlers.ts';
+import { blockInvalidIntegerInput, blockInvalidNumberInput } from '@/utils/inputHandlers';
+import { authService } from '@/services/authService';
+import { diaryService } from '@/services/diaryService';
 
 interface ExerciseLoggerProps {
   onClose: () => void;
@@ -30,16 +32,18 @@ export default function ExerciseLogger({ onClose, editEntry }: ExerciseLoggerPro
   const [selectedActivity, setSelectedActivity] = useState<string | null>(editEntry?.activityType || null);
   const [metric, setMetric] = useState(editEntry ? String(editEntry.metric) : '');
   const [rpe, setRpe] = useState<number>(editEntry?.rpe || 5);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(activities.length === 0);
 
-  // Simulated Database API Fetch delay (1500ms)
   useEffect(() => {
-    setIsLoading(true);
+    if (activities.length > 0) {
+      setIsLoading(false);
+      return;
+    }
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [activities.length]);
 
   const profile = useStore((state) => state.profile);
   const activity = activities.find((a) => a.name === selectedActivity);
@@ -78,6 +82,8 @@ export default function ExerciseLogger({ onClose, editEntry }: ExerciseLoggerPro
   const handleSave = () => {
     if (!activity || !metric || parseFloat(metric) <= 0) return;
 
+    const metricValue = parseFloat(metric);
+
     // Determine intensity based on MET value
     const intensityValue: 'low' | 'medium' | 'high' =
       activity.met < 4 ? 'low' : activity.met < 8 ? 'medium' : 'high';
@@ -85,7 +91,7 @@ export default function ExerciseLogger({ onClose, editEntry }: ExerciseLoggerPro
     const entry: ExerciseEntry = {
       id: editEntry ? editEntry.id : generateSafeId('ex'),
       activityType: activity.name,
-      metric: parseFloat(metric),
+      metric: metricValue,
       metricLabel: activity.metricLabel,
       caloriesBurned: Math.round(calories * 100) / 100,
       met: activity.met,
@@ -99,6 +105,45 @@ export default function ExerciseLogger({ onClose, editEntry }: ExerciseLoggerPro
     } else {
       addExerciseEntry(selectedDate, entry);
     }
+
+    if (authService.isAuthenticated()) {
+      const exerciseId = activity.id || 1;
+      const isMinutes = activity.metricLabel.toLowerCase().includes('min');
+      let durationMinutes = Math.max(1, Math.round(metricValue));
+
+      if (!isMinutes) {
+        if (activity.metricLabel.toLowerCase().includes('rep')) {
+          durationMinutes = Math.max(1, Math.round(metricValue / 10));
+        } else if (activity.metricLabel.toLowerCase().includes('step')) {
+          durationMinutes = Math.max(1, Math.round(metricValue / 100));
+        }
+      }
+
+      const now = new Date();
+      const isToday = selectedDate === now.toISOString().split('T')[0];
+      const loggedAt = isToday
+        ? new Date(Date.now() - 60000).toISOString()
+        : `${selectedDate}T12:00:00.000Z`;
+
+      diaryService
+        .addExerciseEntry(selectedDate, {
+          exerciseId,
+          durationMinutes,
+          loggedAt,
+        })
+        .then((res) => {
+          if (res.ok && res.data) {
+            updateExerciseEntry(selectedDate, entry.id, {
+              ...entry,
+              id: String(res.data.id),
+            });
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to sync exercise entry to backend:', err);
+        });
+    }
+
     onClose();
   };
 
@@ -143,14 +188,14 @@ export default function ExerciseLogger({ onClose, editEntry }: ExerciseLoggerPro
               {isLoading ? (
                 <FoodItemCardSkeleton variant='exercise' count={6} />
               ) : (
-                activities.map((act, idx) => {
+                activities.map((act) => {
                   const Icon = ICONS[act.name] || Dumbbell;
                   return (
                     <motion.button
                       key={act.name}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.05 }}
+                      transition={{ duration: 0.15 }}
                       onClick={() => setSelectedActivity(act.name)}
                       className="w-full flex items-center gap-4 p-4 bg-card rounded-xl border border-border text-left active:bg-secondary/50 transition-colors"
                     >

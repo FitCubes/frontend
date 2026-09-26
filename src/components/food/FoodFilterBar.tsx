@@ -59,7 +59,7 @@ export const FoodFilterBar: React.FC<FoodFilterBarProps> = ({
       </div>
 
       {/* Filters & Sorting Control Panel */}
-      <div className="shrink-0 px-4 pb-4 flex items-center justify-between gap-2 border-b border-white/5 relative z-20">
+      <div className="shrink-0 px-4 h-[51.2px] pb-4 flex justify-between gap-2 border-b border-white/5 relative z-20">
         {/* Category Dropdown Toggle */}
         <div className="relative flex-1">
           <button
@@ -85,7 +85,7 @@ export const FoodFilterBar: React.FC<FoodFilterBarProps> = ({
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="absolute top-full left-0 mt-2 w-48 max-h-64 overflow-y-auto custom-scrollbar glass-card rounded-2xl border border-white/10 shadow-2xl py-2"
+                className="absolute top-0 left-0 mt-2 w-48 max-h-64 overflow-y-auto custom-scrollbar glass-card rounded-2xl border border-white/10 shadow-2xl py-2"
               >
                 {uniqueCategories.map((cat) => (
                   <button
@@ -135,7 +135,7 @@ export const FoodFilterBar: React.FC<FoodFilterBarProps> = ({
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="absolute top-full right-0 mt-2 w-48 glass-card rounded-2xl border border-white/10 shadow-2xl py-2"
+                className="absolute top-0 right-0 mt-2 w-48 glass-card rounded-2xl border border-white/10 shadow-2xl py-2"
               >
                 {SORT_OPTIONS.map((opt) => (
                   <button

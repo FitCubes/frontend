@@ -4,13 +4,17 @@ import type { StoreState } from '../useStore';
 
 export interface DataSlice {
   products: FoodItem[];
+  productsError: string | null;
   activities: ActivityConstant[];
+  activitiesError: string | null;
   isLoadingData: boolean;
   editingRecipe: FoodItem | null;
   customCategories: string[];
   favoriteProductIds: string[];
   setProducts: (products: FoodItem[]) => void;
+  setProductsError: (error: string | null) => void;
   setActivities: (activities: ActivityConstant[]) => void;
+  setActivitiesError: (error: string | null) => void;
   setIsLoadingData: (loading: boolean) => void;
   addProduct: (product: FoodItem) => void;
   updateProduct: (id: string, updates: Partial<FoodItem>) => void;
@@ -23,13 +27,17 @@ export interface DataSlice {
 
 export const createDataSlice: StateCreator<StoreState, [], [], DataSlice> = (set) => ({
   products: [],
+  productsError: null,
   activities: [],
+  activitiesError: null,
   isLoadingData: false,
   editingRecipe: null,
   customCategories: [],
   favoriteProductIds: [],
   setProducts: (products) => set({ products }),
+  setProductsError: (productsError) => set({ productsError }),
   setActivities: (activities) => set({ activities }),
+  setActivitiesError: (activitiesError) => set({ activitiesError }),
   setIsLoadingData: (isLoadingData) => set({ isLoadingData }),
   addProduct: (product) => set((state) => ({ products: [product, ...state.products] })),
   updateProduct: (id, updates) => set((state) => ({

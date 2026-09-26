@@ -1,7 +1,7 @@
 import type { MealType, WeightGoal, DietType, Gender } from '@/constants';
 
 export type { MealType, WeightGoal, DietType, Gender };
-export { ACTIVITY_CONSTANTS, GENDER_OPTIONS, type ActivityConstant } from '@/constants';
+export { GENDER_OPTIONS, type ActivityConstant } from '@/constants';
 
 export interface UserProfile {
   name: string;
@@ -19,6 +19,7 @@ export interface UserProfile {
   };
   goal?: WeightGoal;
   diet?: DietType;
+  avatarUrl?: string;
 }
 
 export interface FoodItem {
